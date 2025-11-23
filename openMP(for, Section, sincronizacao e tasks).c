@@ -125,13 +125,93 @@ Remove a barreira implícita no final do loop, permitindo que os threads continu
 
 
 
+// Diretivas Sicronização
+// ___________________________________________________________________________________
+// Sincronização entre threads em região paralela
+// -----------------------------------------------------------------------------------
+//====================================================================================
+--------------------------------------------------------------------------------------
+/* 
+ *  A diretiva single detemina que o codigo em uma região paralela
+    seja exercutada por somente uma unica thread
+ 
+ * as demais threads aguardam a exercução (excerto
+   com nowait)
+
+*/
+
+// Exemplo 
+_________________________________________________________________________________________
+ #pragma omp parallel
+{
+     printf("Threads %d: iniciada\n", omp_get_thread_num());
+     #pragma omp single
+     printf("Total de threads = %d\n", omp_num_threads());
+}
+
+/* saída (com 4 threds)
+_________________________________________
+Thread 2: iniciada
+Thread 1: iniciada
+Total de threads = 4
+Thread 0: iniciada
+Thread 3: iniciada
+_________________________________________
+*/
+
+// #pragama omp single [clauses]
+/* Clauses:
+     private(list)
+     firstprivate(list)
+     copyprivate(list)
+     allocate([Allocator :]list)
+     nowait
+_________________________________________
+
+   #pragama omp critical[(name)]
+ 
+* Funciona como um mecanismo de exclusão mútua 
+
+* Toda as threads executam, porém, somente uma por vez
+
+ // Exemplo
+_______________________________________
+ X = 0;
+
+ #pragma omp parallel shared(x)
+ {
+   
+    #pragma omp critical
+    X++;
+}
+printf("X = %d\n", X);
+
+
+ #pragma omp barrier
+
+ * Sincronização todas as threds em uma barreira 
+
+Exemplo:
+____________________________________________________
+ * Sincronização todas as threads em uma barreira 
+
+----------------------------------------------------
+#pragama omp parallel
+{
+  compute_a();
+  #pragama_omp barrier
+  computer_b();
+}
+_____________________________________________________
+
+Diretiva task
+-----------------------------------------------------
+paralelismo com uso do conceito de tarefas
 
 
 
 
-
-
-
+*/
 
 
 
