@@ -5,7 +5,7 @@
 *Permite paralelismo laços de maneira automatica 
        * interação do laço são distribuidas e executada em 
          paralelo pelas threads da região paralela 
-*/
+
 
 // Exemplo(sequencial):
 for (i = 0; i < 20; i++)
@@ -60,7 +60,7 @@ Combina vários loops aninhados em um só para paralelização
 
 -nowait 
 Remove a barreira implícita no final do loop, permitindo que os threads continuem sem esperar pelos demais.
-*/
+
 // EXEMPLO PRATICO:
 #pragma omp parallel
 {
@@ -81,7 +81,7 @@ Remove a barreira implícita no final do loop, permitindo que os threads continu
 // Execução paralela de trecho de codigos 
 // -----------------------------------------------------------------------------------
 //====================================================================================
--------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 /*
  * Ulizandoa dentro deum região paralela ou atravéis de ums
    construção com binada parallel sections
@@ -91,7 +91,7 @@ Remove a barreira implícita no final do loop, permitindo que os threads continu
 
  *Sicronização implicita no final (exceto com nowait)
 
-*/
+
 #progma omp parallel
 {
    #pragma omp sections
@@ -130,7 +130,7 @@ Remove a barreira implícita no final do loop, permitindo que os threads continu
 // Sincronização entre threads em região paralela
 // -----------------------------------------------------------------------------------
 //====================================================================================
---------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
 /* 
  *  A diretiva single detemina que o codigo em uma região paralela
     seja exercutada por somente uma unica thread
@@ -138,7 +138,7 @@ Remove a barreira implícita no final do loop, permitindo que os threads continu
  * as demais threads aguardam a exercução (excerto
    com nowait)
 
-*/
+
 
 // Exemplo 
 _________________________________________________________________________________________
@@ -157,10 +157,10 @@ Total de threads = 4
 Thread 0: iniciada
 Thread 3: iniciada
 _________________________________________
-*/
+
 
 // #pragama omp single [clauses]
-/* Clauses:
+  Clauses:
      private(list)
      firstprivate(list)
      copyprivate(list)
@@ -207,8 +207,113 @@ _____________________________________________________
 Diretiva task
 -----------------------------------------------------
 paralelismo com uso do conceito de tarefas
+_____________________________________________________
+
+* Permite paralelizar problemas irregulares
+    * laços sem limites conhecidos
+    * Algoritmo recursivo
+     
+    
+* Tarefas são unidades independentes de trabalho    
+    
+    * são passadas para threads executrem imentiatamente ou posteriomente 
 
 
+    *Exemplos: lista ligada de tarefa a serem processadas
+
+    ___________________________________________________________
+    #pragma omp parallel
+    {
+      #pragma omp single
+
+      Node *n = list-> head;
+      while (n) {
+      #pragma omp task privat(n)
+      compute(n);
+      n = n ->next;
+         }
+       }
+    }
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+* Exemplo: Fibonacci com tarefas
+
+_______________________________________________________________________________
+int main(int argc, char ** argv){
+    int n = atoi(arqv[1]);
+    long resultado;
+
+
+
+    #pragma omp paralela
+    {
+         
+           #pragma omp single nowait
+           resultado = fib(n);
+    }
+
+    printf(" fibonnate(%d) = %ld\n", n, resultado);
+}
+
+
+ 
+    Exemplos: Fibonacci com tarefas
+---------------------------------------------------------------------------
+long fib(int n) {
+long f1, f2, fn;
+if(n == o || n == 1) return(n);
+if(n < 20) return fib(n-1) + fib(n - 2);
+else {
+   #pragama omp task shared(f1)
+   f1 = fib(n - 1);
+
+   #pragma omp task shared(f2)
+   f2 = fib(n - 2);
+
+   #pragma omp taskwiait
+   fn = f1 + f2;
+
+   return fn;
+
+}
+   }   
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#pragma omp task [clauses]
+
+Clases:
+
+      default(Shared | none)
+      mergeable
+      private(list)
+      firstionprivate(list)
+      shared(list)
+      in_reduction(reduction-identifier : list)
+      depend(dependence-type : locator-list)
+      priority(priority-value)
+      allocate([allocator :] list)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 
 */
@@ -227,7 +332,4 @@ paralelismo com uso do conceito de tarefas
 
 
 
-
-
-     }
 
